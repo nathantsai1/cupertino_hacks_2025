@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leafblower - Connecting Photos to Sustainability</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', Arial, sans-serif;
+      line-height: 1.6;
+      background: linear-gradient(135deg, #e0f7fa, #b9fbc0);
+      color: #333;
+      scroll-behavior: smooth;
+    }
+    .parallax-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1920&q=80') no-repeat center/cover;
+      opacity: 0.2;
+      z-index: -1;
+    }
+    .logo-container {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1000;
+    }
+    .logo-container img {
+      height: 60px;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+    .logo-container img:hover {
+      transform: scale(1.1);
+    }
+    header {
+      background: linear-gradient(45deg, #2e7d32, #4caf50);
+      color: white;
+      text-align: center;
+      padding: 4rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2), transparent);
+      opacity: 0.5;
+    }
+    header h1 {
+      font-size: 3rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      position: relative;
+    }
+    header p {
+      font-size: 1.4rem;
+      position: relative;
+    }
+    nav {
+      background: #4caf50;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    nav a {
+      color: white;
+      margin: 0 1.5rem;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+    nav a:hover {
+      color: #e0f7fa;
+      transform: translateY(-2px);
+    }
+    section {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    h2 {
+      color: #2e7d32;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    ul {
+      list-style: square;
+      margin-left: 2rem;
+      margin-bottom: 1rem;
+    }
+    li {
+      margin-bottom: 0.5rem;
+    }
+    .project-image {
+      width: 100%;
+      max-width: 400px; /* Resized from 640px to 400px */
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      margin: 1rem auto;
+      display: block;
+    }
+    .try-link {
+      display: inline-block;
+      padding: 0.8rem 1.6rem;
+      background: #4caf50;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: background 0.3s ease, transform 0.3s ease;
+      margin-top: 1rem;
+    }
+    .try-link:hover {
+      background: #45a049;
+      transform: scale(1.05);
+    }
+    .hero-section {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      margin: 3rem auto;
+      max-width: 900px;
+    }
+    .hero-section img {
+      max-width: 200px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      margin-bottom: 1rem;
+    }
+    .contact-section {
+      padding: 2rem;
+      text-align: center;
+    }
+    .contact-form {
+      margin: 2rem auto 0;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 15px;
+      max-width: 500px;
+      text-align: left;
+    }
+    .contact-form h3 {
+      font-size: 1.5rem;
+      color: #2e7d32;
+      margin-bottom: 1rem;
+    }
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #f9f9f9;
+      color: #333;
+      transition: border-color 0.3s ease;
+    }
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: #4caf50;
+      outline: none;
+    }
+    .contact-form textarea {
+      height: 120px;
+      resize: none;
+    }
+    .contact-form button {
+      width: 100%;
+      padding: 0.8rem;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+    .contact-form button:hover {
+      background: #45a049;
+      transform: scale(1.02);
+    }
+    .contact-form .note {
+      font-size: 0.95rem;
+      color: #333;
+      margin-top: 0.5rem;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .contact-form .note.visible {
+      opacity: 1;
+    }
+    .social-links {
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+    .social-links a {
+      color: #2e7d32;
+      text-decoration: underline;
+      transition: color 0.3s ease;
+    }
+    .social-links a:hover {
+      color: #4caf50;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      background: linear-gradient(45deg, #2e7d32, #4caf50);
+      color: white;
+      width: 100%;
+      font-size: 1.1rem;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="parallax-bg"></div>
+  <div class="logo-container">
+    <a href="#hero">
+      <img src="https://media-hosting.imagekit.io/64314f784aeb4bd7/cd64629e-eb2a-4699-9e76-7c7ea3be4f8a.jpg?Expires=1839136208&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=ADV6x5Vf~3cY-2FSmlPave5g7R15f9Bcq6tc5BPta1rpyEGtkwb4o4tJOmMyYvGgwu4uQ72yiIX5ZuTsEesV4zJIM5mNquezQ-nZ9y9bHqd6Uw8G7kQd2aUmdZV94XyfFdYEITTjp8Y791mMesY5PWyse1XrbpvWynX~W~ADpg6mcvQaoJMHvFu4kTw8QE3nZxXcoSkXdAbblsxIGh2nqIQLI-OfOx9VD3sFeATxLC3J2TGdK1H13SHX3BvoilNh5672Twh33wcNQCVDo17ycDmrBKquTzNyfERqCOAooYxNqn5cxOx03PoQUhT0dgWpDPDnmC07NbTUQQ0sCYw1Ag__" alt="Monkey HQ Logo">
+    </a>
+  </div>
+  <header>
+    <h1>Leafblower: Connecting Photos to Plants</h1>
+    <p>Discover plants and their role in a sustainable future</p>
+  </header>
+  <nav>
+    <a href="#hero">Home</a>
+    <a href="#about">About Us</a>
+    <a href="#project">Our Project</a>
+    <a href="#sustainability">Sustainability</a>
+    <a href="#contact">Contact</a>
+    <a href="projects.html">Try It</a>
+  </nav>
+  <section id="hero" class="hero-section">
+    <img src="https://media-hosting.imagekit.io/64314f784aeb4bd7/cd64629e-eb2a-4699-9e76-7c7ea3be4f8a.jpg?Expires=1839136208&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=ADV6x5Vf~3cY-2FSmlPave5g7R15f9Bcq6tc5BPta1rpyEGtkwb4o4tJOmMyYvGgwu4uQ72yiIX5ZuTsEesV4zJIM5mNquezQ-nZ9y9bHqd6Uw8G7kQd2aUmdZV94XyfFdYEITTjp8Y791mMesY5PWyse1XrbpvWynX~W~ADpg6mcvQaoJMHvFu4kTw8QE3nZxXcoSkXdAbblsxIGh2nqIQLI-OfOx9VD3sFeATxLC3J2TGdK1H13SHX3BvoilNh5672Twh33wcNQCVDo17ycDmrBKquTzNyfERqCOAooYxNqn5cxOx03PoQUhT0dgWpDPDnmC07NbTUQQ0sCYw1Ag__" alt="Monkey HQ Logo">
+    <h2>Welcome to Monkey Headquarters</h2>
+    <p>Derrick C. & Nathan T. present Leafblower, a project inspired by The Biodiversity Monitoring Network.</p>
+  </section>
+  <section id="about">
+    <h2>About Us</h2>
+    <p>The Leafblower team, operating under Monkey Headquarters, is a passionate collaboration between Derrick Chien and Nathan Tsai, two freshmen at Fremont High School dedicated to bridging technology and nature. As environmental enthusiasts, we’re driven by a mission to blend advanced tech with ecological awareness, making nature accessible to everyone through our innovative plant identification app. Our team includes:</p>
+    <ul>
+      <li><strong>Nathan Tsai</strong> - Lead Developer, Freshman @ Fremont High School, Backend & Front End</li>
+      <li><strong>Derrick Chien</strong> - Website, Slide, Marketer, Designer, Freshman @ Fremont High School</li>
+    </ul>
+    <p>Together, we aim to inspire users to connect with their environment and contribute to a greener planet.</p>
+  </section>
+  <section id="project">
+    <h2>Our Project: Leafblower</h2>
+    <p>Explore the natural world with Leafblower—snap a photo, identify a plant, and learn its role in sustainability.</p>
+    <img src="https://helios-i.mashable.com/imagery/articles/00arbVvDc14m8AmQxzGhIOV/hero-image.fill.size_1248x702.v1686931200.jpg" alt="Using Leafblower to identify a plant" class="project-image">
+    <a href="projects.html" class="try-link">Try Leafblower Now</a>
+  </section>
+  <section id="sustainability">
+    <h2>How Leafblower Relates to Sustainability</h2>
+    <p>Leafblower is more than just a plant identifier—it's a tool for fostering sustainable practices and environmental stewardship. Here's how we contribute to sustainability:</p>
+    <ul>
+      <li><strong>Promoting Biodiversity</strong>: By educating users about local plant species and their ecological roles, we raise awareness about preserving native flora and combating invasive species.</li>
+      <li><strong>Carbon Sequestration Awareness</strong>: We provide data on how much CO₂ certain plants, like trees or shrubs, can absorb, encouraging users to plant species that support climate goals.</li>
+      <li><strong>Sustainable Land Use</strong>: Leafblower suggests eco-friendly gardening practices, such as replacing water-intensive lawns with native plants or creating pollinator-friendly gardens to reduce pesticide use.</li>
+      <li><strong>Community Impact</strong>: Users can share their findings with conservation groups or platforms like iNaturalist, contributing to projects that monitor plant health and distribution for ecosystem restoration.</li>
+      <li><strong>Reducing Waste</strong>: We promote natural pest control and companion planting based on identified plants, helping users minimize chemical use in gardening.</li>
+    </ul>
+    <p>By empowering users with knowledge and actionable insights, Leafblower supports a more sustainable future, one plant at a time.</p>
+  </section>
+  <section id="contact" class="contact-section">
+    <h2>Contact Us</h2>
+    <h3>Get in Touch</h3>
+    <p>Email us at <a href="mailto:we.are.monkeys.hq@gmail.com">we.are.monkeys.hq@gmail.com</a> or reach out via the social links below.</p>
+    <div class="contact-form">
+      <h3>Send Us a Message</h3>
+      <form id="contact-form">
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="email" id="email" placeholder="Your Email" required>
+        <textarea id="message" placeholder="Your Message" required></textarea>
+        <button type="submit">Send Message</button>
+        <p class="note" id="form-status"></p>
+      </form>
+    </div>
+    <div class="social-links">
+      <p>Twitter: <a href="https://x.com/themonkey" target="_blank">@MonkeyHQ</a></p>
+      <p>Instagram: <a href="https://www.instagram.com/themonkey.ec/" target="_blank">@MonkeyHQ</a></p>
+      <p>LinkedIn: <a href="https://linkedin.com/company/monkeyhq" target="_blank">Monkey Headquarters</a></p>
+    </div>
+  </section>
+  <footer>
+    <p>© 2025 Leafblower Team. All rights reserved.</p>
+  </footer>
+  <script>
+    document.getElementById("contact-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
+      const status = document.getElementById("form-status");
+      status.classList.remove("visible");
+      if (name && email && message) {
+        status.textContent = "Sending...";
+        status.style.color = "#333";
+        status.classList.add("visible");
+        setTimeout(() => {
+          status.textContent = "Thanks for reaching out! We'll get back to you soon.";
+          status.style.color = "#2e7d32";
+          status.classList.add("visible");
+          document.getElementById("contact-form").reset();
+        }, 1000);
+      } else {
+        status.textContent = "Please fill out all fields.";
+        status.style.color = "#d32f2f";
+        status.classList.add("visible");
+      }
+    });
+
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    sections.forEach(section => observer.observe(section));
+  </script>
+</body>
+</html>

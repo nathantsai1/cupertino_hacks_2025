@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404 Not Found</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f9f9f9;
+      font-family: 'Roboto', sans-serif;
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #333;
+    }
+
+    .image-container {
+      position: relative;
+      display: inline-block;
+      max-width: 90%;
+    }
+
+    .image-container img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .image-button {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0.8rem 1.6rem;
+      background-color: #4285f4;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .image-button:hover {
+      background-color: #3367d6;
+    }
+
+    @media (max-width: 600px) {
+      .image-button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="image-container">
+    <img src="https://www.sumydesigns.com/wp-content/uploads/2019/03/404-error.jpg" alt="404 Error" />
+    <a href="index.html" class="image-button">Return to Home</a>
+  </div>
+</body>
+</html>

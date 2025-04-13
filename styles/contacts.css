@@ -1,0 +1,124 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #fff;
+  background-color: #60678d;
+}
+
+nav {
+  background-color: #2e7d32;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+nav .logo {
+  height: 50px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li a {
+  color: rgb(118, 75, 75);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.welcome-section {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.contact-section {
+  background: url('https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1920&q=80') no-repeat center/cover;
+}
+
+.contact-form {
+  margin: 2rem auto 0;
+  background: rgba(255, 255, 255, 0.3);
+  padding: 2rem;
+  border-radius: 15px;
+  max-width: 500px;
+  text-align: left;
+}
+
+.contact-form h3 {
+  font-size: 1.5rem;
+  color: #2a6982;
+  margin-bottom: 1rem;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  background: rgba(62, 95, 67, 0.8);
+  color: #333;
+}
+
+.contact-form textarea {
+  height: 100px;
+  resize: none;
+}
+
+.contact-form button {
+  width: 100%;
+  padding: 0.8rem;
+  background: linear-gradient(45deg, #4caf50, #81c784);
+  color: rgb(117, 119, 71);
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.contact-form .note {
+  font-size: 0.95rem;
+  color: #fff;
+  margin-top: 0.5rem;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.contact-form .note.visible {
+  opacity: 1;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.interactive-section {
+  padding: 2rem;
+  text-align: center;
+}
+
+.social-links {
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.social-links a {
+  color: #a65151;
+  text-decoration: underline;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.contact-form button:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2) inset;
+}
