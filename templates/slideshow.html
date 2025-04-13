@@ -11,6 +11,7 @@
       box-sizing: border-box;
     }
     body {
+        
       font-family: 'Poppins', Arial, sans-serif;
       line-height: 1.6;
       background: linear-gradient(135deg, #e0f7fa, #b9fbc0);
@@ -243,6 +244,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
   <div class="parallax-bg"></div>
   <div class="logo-container">
     <a href="#hero">
@@ -280,6 +282,8 @@
     <p>Explore the natural world with Leafblower—snap a photo, identify a plant, and learn its role in sustainability.</p>
     <img src="https://helios-i.mashable.com/imagery/articles/00arbVvDc14m8AmQxzGhIOV/hero-image.fill.size_1248x702.v1686931200.jpg" alt="Using Leafblower to identify a plant" class="project-image">
     <a href="projects.html" class="try-link">Try Leafblower Now</a>
+      <!-- 📸 New photo input button -->
+    <input type="file" accept="image/*" capture="environment" id="photoInput">
   </section>
   <section id="sustainability">
     <h2>How Leafblower Relates to Sustainability</h2>
@@ -351,5 +355,17 @@
     }, { threshold: 0.1 });
     sections.forEach(section => observer.observe(section));
   </script>
+  <script>
+    document.getElementById('photoInput').addEventListener('change', function (event) {
+      const file = event.target.files[0];
+      if (file) {
+        // Optional: You can store the image in local storage or pass it via formData to the backend
+        // Redirect to backend page where processing happens
+        // Replace this with the real backend page URL:
+        window.location.href = "process.html?image=" + encodeURIComponent(file.name);
+      }
+    });
+  </script>
+  
 </body>
 </html>
