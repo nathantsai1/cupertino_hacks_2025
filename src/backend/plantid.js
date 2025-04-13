@@ -3,10 +3,6 @@ const fs = require('fs');
 require("dotenv").config();
 
 async function fetchPlant(image, coords) {
-  let result = readPlantIdFile();
-  // temporary fix to reduce api calls
-  return result;
-
   const data = {
     images: [image],
     latitude: coords[0], // Add latitude

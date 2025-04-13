@@ -54,7 +54,7 @@ async function understand(jsonify) {
     const suggestions = temp.result.classification.suggestions;
 
     if (suggestions.length > 0) {
-        return suggestions; // Return the suggestions array
+            return suggestions; // Return the suggestions array
     } else {
         throw new Error('No suggestions found in the response');
     }

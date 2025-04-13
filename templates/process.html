@@ -142,54 +142,75 @@
         </ul>
       </div>
 
+      <!-- Plant Info Container -->
+      <div id="plant-info-container" class="mt-6">
+        <!-- Plant information will be dynamically loaded here -->
+      </div>
+
       <!-- CTA Button -->
       <a href="/" class="cta-button">Back to Home</a>
     </div>
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      // The plant data to be dynamically injected
-      const plantData = {
-        name: "Arctostaphylos crustacea",
-        probability: "1.83%",
-        description: [
-          "Common Name: Brittleleaf Manzanita",
-          "Type: Low-growing evergreen shrub",
-          "Native to: California",
-          "Height: Rarely exceeds 1 foot",
-          "Distinctive Features: Brittle, reddish-brown bark and small, leathery, oval-shaped leaves",
-          "Flowers: Clusters of small, urn-shaped white or pink flowers in spring",
-          "Fruits: Reddish-brown berries that attract wildlife"
-        ],
-        howToKeepAlive: [
-          "Soil: Well-drained",
-          "Sunlight: Needs full sunlight",
-          "Watering: Drought-tolerant, minimal watering once established",
-          "Pruning: Regular pruning to maintain shape and encourage growth"
-        ]
-      };
-
-      // Insert plant data into the HTML
-      document.getElementById("plant-name").textContent = plantData.name;
-      document.getElementById("plant-probability").innerHTML = `<strong class="text-green-900">Probability:</strong> ${plantData.probability}`;
-
-      // Insert the plant description list
-      const descriptionList = document.getElementById("plant-description");
-      plantData.description.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = item;
-        descriptionList.appendChild(li);
-      });
-
-      // Insert the "How to Keep Alive" list
-      const keepAliveList = document.getElementById("how-to-keep-alive");
-      plantData.howToKeepAlive.forEach(item => {
-        const li = document.createElement("li");
-        li.textContent = item;
-        keepAliveList.appendChild(li);
-      });
-    });
+    async function loadPlantInfo() {
+      try {
+        // Fetch the plants_info.json file
+        const response = await fetch('../plants_info.json'); // Adjust the path if necessary
+        if (!response.ok) {
+          throw new Error(`Failed to fetch plants_info.json: ${response.status}`);
+        }
+  
+        const plants = await response.json();
+        console.log('Loaded plant info:', plants);
+  
+        // Get the container where the plant info will be displayed
+        const container = document.getElementById('plant-info-container');
+  
+        // Check if the container exists
+        if (!container) {
+          throw new Error('Element with id "plant-info-container" not found in the DOM');
+        }
+  
+        // Clear any existing content
+        container.innerHTML = '';
+  
+        // Loop through the plants and create HTML for each
+        plants.forEach((plant) => {
+          const plantDiv = document.createElement('div');
+          plantDiv.style.border = '1px solid #ccc';
+          plantDiv.style.padding = '10px';
+          plantDiv.style.marginBottom = '10px';
+  
+          // Format the description object as a list
+          const descriptionHtml = Object.entries(plant.description)
+            .map(([key, value]) => `<li><strong>${key}:</strong> ${value}</li>`)
+            .join('');
+  
+          // Format the how_to_keep_alive object as a list (if it exists)
+          const howToKeepAliveHtml = plant.how_to_keep_alive
+            ? Object.entries(plant.how_to_keep_alive)
+                .map(([key, value]) => `<li><strong>${key}:</strong> ${value}</li>`)
+                .join('')
+            : 'No care instructions available.';
+  
+          plantDiv.innerHTML = `
+            <h3>${plant.name} (${plant.probability_percent})</h3>
+            <p><strong>Description:</strong></p>
+            <ul>${descriptionHtml}</ul>
+            <p><strong>How to Keep Alive:</strong></p>
+            <ul>${howToKeepAliveHtml}</ul>
+          `;
+  
+          container.appendChild(plantDiv);
+        });
+      } catch (error) {
+        console.error('Error loading plant info:', error);
+      }
+    }
+  
+    // Call the function to load plant info when the page loads
+    document.addEventListener('DOMContentLoaded', loadPlantInfo);
   </script>
 
 </body>

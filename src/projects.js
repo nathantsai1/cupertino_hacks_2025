@@ -62,6 +62,7 @@ captureButton.addEventListener('click', async () => {
                 const result = await plant_backend(imageData, [crd.latitude, crd.longitude]);
                 console.log('Result from backend:', result);
                 // TODO: Handle the result (e.g., display it on the frontend)
+                result.redirect('/templates/process.html');
             } catch (error) {
                 console.error('Error sending data to backend:', error);
             }

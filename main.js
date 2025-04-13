@@ -68,7 +68,7 @@ app.post('/ai_it', express.json(), async (req, res) => {
     console.log(req.body.input);
     const result = await getDescription(req.body.input);
     console.log('Result from getDescription:', result);
-    res.json(result);
+    res.redirect('/templates/process.html')
 });
 app.get('/initialize', (req, res) => {
     res.sendFile(path.join(__dirname, '/templates/initialize.html'));
