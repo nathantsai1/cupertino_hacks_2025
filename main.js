@@ -1,3 +1,4 @@
+const cors = require('cors'); // Import the cors package
 const express = require('express');
 const path = require('path');
 const { fetchPlant } = require('./src/backend/plantid'); // Adjust the path as necessary
@@ -12,6 +13,7 @@ const PORT = 3000;
 app.use(express.static(path.join(__dirname)));
 app.use(bodyParser.json({ limit: '10mb' })); // Increase limit to 10MB
 app.use(bodyParser.urlencoded({ limit: '10mb', extended: true })); // For URL-encoded data
+app.use(cors());
 
 // Route to serve index.html on the home screen
 app.get('/', (req, res) => {
@@ -25,6 +27,7 @@ app.post('/identify', express.json(), async (req, res) => {
     try {
         const plantDetails = await fetchPlant(image, coords);
         const filtered = res.json(plantDetails); // Send back the plant identification details
+        console.log('Plant details:', plantDetails); // Debug the response here
         return filtered;
     } catch (error) {
         res.status(500).json({ error: 'Error identifying plant' });

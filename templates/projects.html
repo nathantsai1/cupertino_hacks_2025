@@ -4,174 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Leafblower - Try It</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      font-family: 'Poppins', Arial, sans-serif;
-      line-height: 1.6;
-      background: linear-gradient(135deg, #e0f7fa, #b9fbc0);
-      color: #333;
-      scroll-behavior: smooth;
-    }
-    .parallax-bg {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=1920&q=80') no-repeat center/cover;
-      opacity: 0.2;
-      z-index: -1;
-    }
-    .logo-container {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 1000;
-    }
-    .logo-container img {
-      height: 60px;
-      border-radius: 50%;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      transition: transform 0.3s ease;
-    }
-    .logo-container img:hover {
-      transform: scale(1.1);
-    }
-    header {
-      background: linear-gradient(45deg, #2e7d32, #4caf50);
-      color: white;
-      text-align: center;
-      padding: 4rem 2rem;
-      position: relative;
-      overflow: hidden;
-    }
-    header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle, rgba(255,255,255,0.2), transparent);
-      opacity: 0.5;
-    }
-    header h1 {
-      font-size: 3rem;
-      text-shadow: 2px amikor2px 4px rgba(0,0,0,0.3);
-      position: relative;
-    }
-    header p {
-      font-size: 1.4rem;
-      position: relative;
-    }
-    nav {
-      background: #4caf50;
-      padding: 1rem;
-      text-align: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-    nav a {
-      color: white;
-      margin: 0 1.5rem;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1.1rem;
-      transition: color 0.3s ease, transform 0.3s ease;
-    }
-    nav a:hover {
-      color: #e0f7fa;
-      transform: translateY(-2px);
-    }
-    section {
-      max-width: 900px;
-      margin: 3rem auto;
-      padding: 2rem;
-      background: rgba(255, 255, 255, 0.95);
-      border-radius: 15px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      opacity: 0;
-      transform: translateY(50px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-      text-align: center;
-    }
-    section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    h2 {
-      color: #2e7d32;
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-    #camera-container {
-      position: relative;
-      width: 100%;
-      max-width: 640px;
-      margin: 0 auto;
-    }
-    #video {
-      width: 100%;
-      border: 2px solid #4caf50;
-      border-radius: 8px;
-    }
-    #canvas {
-      display: none;
-    }
-    #captured-image {
-      width: 100%;
-      max-width: 640px;
-      border: 2px solid #4caf50;
-      border-radius: 8px;
-      margin-top: 1rem;
-    }
-    .button-container {
-      margin-top: 1rem;
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-    }
-    button {
-      background: #4caf50;
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: background 0.3s ease, transform 0.3s ease;
-    }
-    button:hover {
-      background: #388e3c;
-      transform: scale(1.02);
-    }
-    button:disabled {
-      background: #cccccc;
-      cursor: not-allowed;
-    }
-    footer {
-      text-align: center;
-      padding: 2rem;
-      background: linear-gradient(45deg, #2e7d32, #4caf50);
-      color: white;
-      width: 100%;
-      font-size: 1.1rem;
-    }
-  </style>
+  <link rel="stylesheet" href="../styles/projects.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="parallax-bg"></div>
   <div class="logo-container">
     <a href="index.html#hero">
-      <img src="https://media-hosting.imagekit.io/64314f784aeb4bd7/cd64629e-eb2a-4699-9e76-7c7ea3be4f8a.jpg?Expires=1839136208&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=ADV6x5Vf~3cY-2FSmlPave5g7R15f9Bcq6tc5BPta1rpyEGtkwb4o4tJOmMyYvGgwu4uQ72yiIX5ZuTsEesV4zJIM5mNquezQ-nZ9y9bHqd6Uw8G7kQd2aUmdZV94XyfFdYEITTjp8Y791mMesY5PWyse1XrbpvWynX~W~ADpg6mcvQaoJMHvFu4kTw8QE3nZxXcoSkXdAbblsxIGh2nqIQLI-OfOx9VD3sFeATxLC3J2TGdK1H13SHX3BvoilNh5672Twh33wcNQCVDo17ycDmrBKquTzNyfERqCOAooYxNqn5cxOx03PoQUhT0dgWpDPDnmC07NbTUQQ0sCYw1Ag__" alt="Monkey HQ Logo">
+      <img src="https://media-hosting.imagekit.io/64314f784aeb4bd7/cd64629e-eb2a-4699-9e76-7c7ea3be4f8a.jpg" alt="Monkey HQ Logo">
     </a>
   </div>
   <header>
@@ -189,88 +29,21 @@
   <section id="projects">
     <h2>Capture a Plant</h2>
     <p>Use your camera to take a photo of a plant, and we’ll help identify it!</p>
-    <div id="camera-container">
-      <video id="video" autoplay playsinline></video>
-      <canvas id="canvas"></canvas>
-      <img id="captured-image" src="" alt="Captured plant photo" style="display: none;">
-    </div>
+    <video id="video" autoplay playsinline style="width: 100%; max-width: 500px; border: 1px solid black;"></video>
     <div class="button-container">
-      <button id="flip-button" disabled>Flip Camera</button>
-      <button id="capture-button" disabled>Capture</button>
+      <button id="flip-button">Flip Camera</button>
+      <button id="capture-button">Capture</button>
       <button id="retake-button" style="display: none;">Retake</button>
     </div>
+    <canvas id="canvas" style="display: none;"></canvas>
+    <img id="captured-image" style="display: none; width: 100%; max-width: 500px; border: 1px solid black;" alt="Captured Image">
   </section>
   <footer>
     <p>© 2025 Leafblower Team. All rights reserved.</p>
   </footer>
-  <script>
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const capturedImage = document.getElementById('captured-image');
-    const flipButton = document.getElementById('flip-button');
-    const captureButton = document.getElementById('capture-button');
-    const retakeButton = document.getElementById('retake-button');
-    
-    let currentStream = null;
-    let facingMode = 'environment';
-
-    async function startCamera() {
-      try {
-        if (currentStream) {
-          currentStream.getTracks().forEach(track => track.stop());
-        }
-        currentStream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: facingMode }
-        });
-        video.srcObject = currentStream;
-        captureButton.disabled = false;
-        flipButton.disabled = false;
-      } catch (err) {
-        console.error('Error accessing camera:', err);
-        alert('Unable to access camera. Please ensure permissions are granted.');
-      }
-    }
-
-    flipButton.addEventListener('click', () => {
-      facingMode = facingMode === 'environment' ? 'user' : 'environment';
-      startCamera();
-    });
-
-    captureButton.addEventListener('click', () => {
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      canvas.getContext('2d').drawImage(video, 0, 0);
-      capturedImage.src = canvas.toDataURL('image/jpeg');
-      capturedImage.style.display = 'block';
-      video.style.display = 'none';
-      captureButton.style.display = 'none';
-      flipButton.style.display = 'none';
-      retakeButton.style.display = 'inline-block';
-
-      const imageData = canvas.toDataURL('image/jpeg');
-      console.log('Image captured, ready for backend processing:', imageData.substring(0, 50) + '...');
-    });
-
-    retakeButton.addEventListener('click', () => {
-      capturedImage.style.display = 'none';
-      video.style.display = 'block';
-      captureButton.style.display = 'inline-block';
-      flipButton.style.display = 'inline-block';
-      retakeButton.style.display = 'none';
-      startCamera();
-    });
-
-    startCamera();
-
-    const sections = document.querySelectorAll('section');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.1 });
-    sections.forEach(section => observer.observe(section));
-  </script>
+  <script src="../src/toBackend.js"></script>
+    <script src="../src/geolocation.js"></script>
+    <script src="../src/index.js"></script>
+  <script src="../src/projects.js"></script>
 </body>
 </html>
