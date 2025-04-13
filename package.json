@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "the monkeys",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
+    "start": "nodemon main.js",
     "test": "npm test.js"
   },
   "repository": {
@@ -17,7 +19,10 @@
   },
   "homepage": "https://github.com/nathantsai1/cupertino_hacks_2025#readme",
   "dependencies": {
+    "@google/generative-ai": "^0.24.0",
     "dotenv": "^16.5.0",
-    "nodemon": "^3.1.9"
+    "express": "^5.1.0",
+    "nodemon": "^3.1.9",
+    "path": "^0.12.7"
   }
 }
