@@ -48,21 +48,25 @@ captureButton.addEventListener('click', async () => {
     flipButton.style.display = 'none';
     retakeButton.style.display = 'inline-block';
 
-    console.log('Captured Image Data:', imageData);
-
     // Get GPS location
     navigator.geolocation.getCurrentPosition(
         async (position) => {
             const crd = position.coords;
-            console.log('Latitude:', crd.latitude);
-            console.log('Longitude:', crd.longitude);
 
             // Send the image and coordinates to the backend
             try {
+                // Show loading indicators
+                const loadingElements = document.getElementsByClassName('loading'); // Get all elements with the 'loading' class
+                for (let i = 0; i < loadingElements.length; i++) {
+                    loadingElements[i].style.display = 'block'; // Show each loading element
+                }
+                capturedImage.style.left = '50%'; // Center the image
+                capturedImage.style.top = '50%'; // Center the image
+                capturedImage.style.opacity = '0.5'; // Dim the captured image
                 const result = await plant_backend(imageData, [crd.latitude, crd.longitude]);
                 console.log('Result from backend:', result);
                 // TODO: Handle the result (e.g., display it on the frontend)
-                result.redirect('/templates/process.html');
+                window.location.href = '/results';
             } catch (error) {
                 console.error('Error sending data to backend:', error);
             }
@@ -87,12 +91,12 @@ retakeButton.addEventListener('click', () => {
 startCamera();
 
 // Intersection Observer for animations
-const sections = document.querySelectorAll('section');
-const observer = new IntersectionObserver((entries) => {
+const pageSections = document.querySelectorAll('section');
+const observer_v2 = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('visible');
         }
     });
 }, { threshold: 0.1 });
-sections.forEach(section => observer.observe(section));
+pageSections.forEach(section => observer.observe(section));

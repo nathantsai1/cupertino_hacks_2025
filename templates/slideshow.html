@@ -355,17 +355,48 @@
     }, { threshold: 0.1 });
     sections.forEach(section => observer.observe(section));
   </script>
+    <script src="../src/toBackend.js"></script>
+
   <script>
-    document.getElementById('photoInput').addEventListener('change', function (event) {
-      const file = event.target.files[0];
-      if (file) {
-        // Optional: You can store the image in local storage or pass it via formData to the backend
-        // Redirect to backend page where processing happens
-        // Replace this with the real backend page URL:
-        window.location.href = "process.html?image=" + encodeURIComponent(file.name);
-      }
-    });
+    const photoInput = document.getElementById('photoInput');
+photoInput.addEventListener('change', async (event) => {
+    const file = event.target.files[0]; // Get the selected file
+    if (file) {
+      const reader = new FileReader(); // Create a FileReader to read the file
+      reader.onload = async (e) => {
+        const base64Image = e.target.result; // Get the Base64 URL of the image
+  
+        // Get GPS location
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const crd = position.coords;
+  
+            // Send the image and coordinates to the backend
+            try {
+              const result = await plant_backend(base64Image, [crd.latitude, crd.longitude]);
+              console.log('Result from backend:', result);
+              // TODO: Handle the result (e.g., display it on the frontend)
+              window.location.href = '/results';
+            } catch (error) {
+              console.error('Error sending data to backend:', error);
+            }
+          },
+          (err) => {
+            console.error('Error getting location:', err);
+          }
+        );
+      };
+      reader.readAsDataURL(file); // Read the file as a Data URL (Base64)
+    } else {
+      console.error('No file selected');
+    }
+  });
   </script>
+
+  <!-- <script src="../src/toBackend.js"></script>
+    <script src="../src/geolocation.js"></script>
+  <script src="../src/projects.js"></script> -->
+
   
 </body>
 </html>

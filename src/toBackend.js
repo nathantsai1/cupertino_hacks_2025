@@ -28,7 +28,6 @@ async function plant_backend(imageData, coords) {
             },
             body: JSON.stringify({ input: result1 }),
         });
-
         if (!result.ok) {
             throw new Error(`Error from /ai_it: ${result.status}`);
         }

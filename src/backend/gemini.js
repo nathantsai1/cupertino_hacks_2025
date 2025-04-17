@@ -1,34 +1,37 @@
-require("dotenv").config();
+const path = require('path');
 const fs = require("fs");
+
+require("dotenv").config();
+
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 async function getPlantInfo(plant, model) {
-    const prompt = `
-Give me the following information about the plant "${plant.name}":
-1. A short paragraph describing the plant.
-2. A paragraph on how to make sure it does not die by itself (care instructions).
-Respond clearly and concisely in the following JSON format. DO NOT RETURN ANYTHING ELSE. DO NOT ADD 'json' BEFORE THE JSON OBJECT. DO NOT ADD ANYTHING ELSE.:
-{
-  "name": "${plant.name}",
-  "probability": "xx.xx%",
-  "description": {
-    "Common Name": "text",
-    "Type": "text",
-    "Native to": "text",
-    "Height": "text",
-    "Distinctive Features": "text",
-    "Flowers": "text",
-    "Fruits": "text"
-  },
-  "howToKeepAlive": {
-    "Soil": "well/medium/badly drained",
-    "Sunlight": "Needs full/medium/little sunlight",
-    "Watering": "is/isn't Drought-tolerant, needs/doesn't need minimal watering once established",
-    "Pruning": "Regular pruning needed/not needed to maintain shape and encourage growth"
-}}
-`;
+const prompt = `
+  Give me the following information about the plant "${plant.name}":
+  1. A short paragraph describing the plant.
+  2. A paragraph on how to make sure it does not die by itself (care instructions).
+  Respond clearly and concisely in the following JSON format. DO NOT RETURN ANYTHING ELSE. DO NOT ADD 'json' BEFORE THE JSON OBJECT. DO NOT ADD ANYTHING ELSE.:
+  {
+    "name": "${plant.name}",
+    "probability": "xx.xx%",
+    "description": {
+      "Common Name": "text",
+      "Type": "text",
+      "Native to": "text",
+      "Height": "text",
+      "Distinctive Features": "text",
+      "Flowers": "text",
+      "Fruits": "text"
+    },
+    "howToKeepAlive": {
+      "Soil": "well/medium/badly drained",
+      "Sunlight": "Needs full/medium/little sunlight",
+      "Watering": "is/isn't Drought-tolerant, needs/doesn't need minimal watering once established",
+      "Pruning": "Regular pruning needed/not needed to maintain shape and encourage growth"
+  }}
+  `;
   
     const result = await model.generateContent(prompt);
     const text = await result.response.text();
@@ -51,6 +54,8 @@ Respond clearly and concisely in the following JSON format. DO NOT RETURN ANYTHI
   }
 
 async function getDescription(PLANTS) {
+  return JSON.parse(readGeminiIdFile());
+
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
 
   const plantInfos = [];
@@ -63,6 +68,17 @@ async function getDescription(PLANTS) {
   fs.writeFileSync("plants_info.json", JSON.stringify(plantInfos, null, 2));
   console.log("✅ File 'plants_info.json' has been created.");
   return plantInfos;
+}
+
+function readGeminiIdFile() {
+  const filePath = path.join(__dirname, '../../txt/gemini.txt'); // Adjust the path as necessary
+  try {
+    const data = fs.readFileSync(filePath, 'utf8'); // Read the file synchronously
+    return data; // Return the file content
+  } catch (error) {
+    console.error("Error reading the file:", error);
+    throw error; // Re-throw the error for the caller to handle
+  }
 }
 
 module.exports = {

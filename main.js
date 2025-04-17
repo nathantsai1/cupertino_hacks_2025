@@ -19,9 +19,12 @@ app.use(cors());
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, './templates/slideshow.html'));
 });
+app.get('/home', (req, res) => {
+    res.sendFile(path.join(__dirname, './templates/slideshow.html'));
+});
 
 app.get('/process.html', (req, res) => {
-    res.sendFile(path.join(__dirname, './templates/process.html'));
+    res.sendFile(path.join(__dirname, './templates/result.html'));
 });
 
 app.get('/projects.html', (req, res) => {
@@ -34,7 +37,6 @@ app.post('/identify', express.json(), async (req, res) => {
     const coords = req.body.coords; // Assuming the image is sent in the request body
     try {
         const plantDetails = await fetchPlant(image, coords);
-        console.log('Plant details:', plantDetails); // Debug the response here
         res.json(plantDetails); // Send back the plant identification details
     } catch (error) {
         console.error('Error identifying plant:', error);
@@ -71,19 +73,23 @@ app.get('/temp', (req, res) => {
 
 app.post('/ai_it', express.json(), async (req, res) => {
     const input = req.body.input; // Assuming the input is sent in the request body
-    const result = await fetch('http://localhost:3000/ai_it', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ input: result }),
+    if (!input && input.length != 3) {
+        const errorText = await result.text();
+        console.error(`Error from /ai_it: ${result.status} - ${errorText}`);
+        throw new Error(`Error from /ai_it: ${result.status}`);
+    }
+    try {
+        const result = await getDescription(input);
+        res.json(result); // Send back the AI description
+        
+    } catch (error) {
+        console.error('Error getting AI description:', error);
+        res.status(500).json({ error: 'Error getting AI description' });
+    }
 });
 
-if (!result.ok) {
-    const errorText = await result.text();
-    console.error(`Error from /ai_it: ${result.status} - ${errorText}`);
-    throw new Error(`Error from /ai_it: ${result.status}`);
-}
+app.get('/results', (req, res) => {
+    res.sendFile(path.join(__dirname, '/templates/result.html'));
 });
 app.get('/initialize', (req, res) => {
     res.sendFile(path.join(__dirname, '/templates/initialize.html'));

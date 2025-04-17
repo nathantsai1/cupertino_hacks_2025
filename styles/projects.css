@@ -105,7 +105,7 @@
     margin-bottom: 1rem;
   }
   #camera-container {
-    position: relative;
+    position: absolute;
     width: 100%;
     max-width: 640px;
     margin: 0 auto;
@@ -115,9 +115,7 @@
     border: 2px solid #4caf50;
     border-radius: 8px;
   }
-  #canvas {
-    display: none;
-  }
+
   #captured-image {
     width: 100%;
     max-width: 640px;
@@ -130,6 +128,7 @@
     display: flex;
     justify-content: center;
     gap: 1rem;
+    
   }
   button {
     background: #4caf50;
@@ -156,4 +155,54 @@
     color: white;
     width: 100%;
     font-size: 1.1rem;
+  }
+
+  #canvas-container {
+    position: relative;
+    width: 50%;            /* your desired width */
+    margin: 1rem auto;     
+    /*height: 500px; /* Set a specific height */
+    /* center horizontally */
+  }
+  
+  /* canvas “below” */
+  #canvas {
+    display: none;         /* JS will show */
+    width: 100%;
+    z-index: 1;            /* lower than spinner */
+    position: absolute;    /* or absolute if you prefer */
+    transform: translateY(-100%); /* Move canvas up by 100% of its height */
+}
+  
+  /* spinner “on top” */
+  #canvas-loader {
+    display: none;         /* JS will show */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;            /* higher than canvas */
+  }
+  
+  /* Just the spinning part */
+  .loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    display: absolute;
+  }
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  #projects {
+    display: flex;
+  flex-direction: column;
+  align-items: center;
   }
