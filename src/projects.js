@@ -64,7 +64,8 @@ captureButton.addEventListener('click', async () => {
                 capturedImage.style.top = '50%'; // Center the image
                 capturedImage.style.opacity = '0.5'; // Dim the captured image
                 const result = await plant_backend(imageData, [crd.latitude, crd.longitude]);
-                console.log('Result from backend:', result);
+                console.log('Result from backend:', result.json());
+                console.log('Result from plain backend:', result);
                 // TODO: Handle the result (e.g., display it on the frontend)
                 window.location.href = '/results';
             } catch (error) {
@@ -92,7 +93,7 @@ startCamera();
 
 // Intersection Observer for animations
 const pageSections = document.querySelectorAll('section');
-const observer_v2 = new IntersectionObserver((entries) => {
+const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('visible');

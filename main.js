@@ -1,36 +1,24 @@
-const cors = require('cors'); // Import the cors package
 const express = require('express');
 const path = require('path');
-const { fetchPlant } = require('./src/backend/plantid'); // Adjust the path as necessary
+const fs = require('fs');
+
 const app = express();
 const bodyParser = require('body-parser');
-const { getDescription } = require('./src/backend/gemini'); // Adjust the path as necessary
-const fs = require('fs');
+const cors = require('cors');
+
+const { check_users, encrypt_password, } = require('./src/backend/login');
+const { fetchPlant } = require('./src/backend/plantid'); 
+const { fetchPhotos } = require('./src/backend/photos'); 
+const { getDescription } = require('./src/backend/gemini'); 
 
 const PORT = 3000;
 
-// Serve static files from the current directory
 app.use(express.static(path.join(__dirname)));
-app.use(bodyParser.json({ limit: '10mb' })); // Increase limit to 10MB
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true })); // For URL-encoded data
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));
 app.use(cors());
 
-// Route to serve index.html on the home screen
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, './templates/slideshow.html'));
-});
-app.get('/home', (req, res) => {
-    res.sendFile(path.join(__dirname, './templates/slideshow.html'));
-});
-
-app.get('/process.html', (req, res) => {
-    res.sendFile(path.join(__dirname, './templates/result.html'));
-});
-
-app.get('/projects.html', (req, res) => {
-    res.sendFile(path.join(__dirname, './templates/projects.html'));
-});
-
+// POST REQUESTS
 app.post('/identify', express.json(), async (req, res) => {
     console.log("Received request to identify plant");
     const image = req.body.image; // Assuming the image is sent in the request body
@@ -44,33 +32,6 @@ app.post('/identify', express.json(), async (req, res) => {
     }
 });
 
-app.get('/temp', (req, res) => {
-    const filePath = path.join(__dirname, './txt/index.txt');
-    fs.readFile(filePath, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Error reading file:', err);
-            return res.status(500).send('Internal Server Error');
-        }
-
-        // Wrap the text content in basic HTML structure
-        const htmlContent = `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Index</title>
-            </head>
-            <body>
-                <pre>${data}</pre>
-            </body>
-            </html>
-        `;
-
-        res.send(htmlContent);
-    });
-})
-
 app.post('/ai_it', express.json(), async (req, res) => {
     const input = req.body.input; // Assuming the input is sent in the request body
     if (!input && input.length != 3) {
@@ -80,6 +41,7 @@ app.post('/ai_it', express.json(), async (req, res) => {
     }
     try {
         const result = await getDescription(input);
+        console.log('ai_it', await result)
         res.json(result); // Send back the AI description
         
     } catch (error) {
@@ -88,16 +50,106 @@ app.post('/ai_it', express.json(), async (req, res) => {
     }
 });
 
+app.post('/photos', express.json(), async (req, res) => {
+    const plantData = req.body.plantData; // Assuming the plant data is sent in the request body
+    try {
+        const updatedPlantData = await fetchPhotos(plantData); // Fetch photo links
+        console.log('main.js', updatedPlantData.json())
+        res.json(updatedPlantData); // Send back the updated plant data with photo links
+    } catch (error) {
+        console.error('Error fetching photo links:', error);
+        res.status(500).json({ error: 'Error fetching photo links' });
+    }
+});
+
+app.post('/signup', async (req, res) => {
+    // TODO idK?
+    const { email, password, confirm_password, date, security_q, check } = req.body;
+    // s1: check if email and password are valid
+    // 1=success, 2=pw not the same, 3=username not valid, 4=pw errror 5=somethng wriong 6=check not clicked
+    if (!check) {
+        res.send(6);
+        return;
+    }
+    if(!email || !password || !confirm_password || !date || !security_q) {
+        res.send(5);
+        return;
+    } else if (password !== confirm_password) {
+        res.send(2);
+        return;
+    }
+    const is_valid = await check_users(email, password);
+    if (!is_valid) res.send(is_valid);
+    
+    // s2: encrypt pw
+    // 1=success 0=pw error
+    const hashedPassword = await encrypt_password(password);
+
+    // Here you would typically handle the signup logic (e.g., save to database)
+});
+app.post('/login', express.json(), async (req, res) => {
+    // TODO idK?
+    const { email, password } = req.body;
+    
+    // s1: find username pw
+    // check email/pw requirements
+    
+    // Here you would typically handle the signup logic (e.g., save to database)
+});
+
+// GET REQUESTS
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './templates/slideshow.html'));
+});
+
+app.get('/projects.html', (req, res) => {
+    res.sendFile(path.join(__dirname, './templates/projects.html'));
+});
+
 app.get('/results', (req, res) => {
     res.sendFile(path.join(__dirname, '/templates/result.html'));
 });
-app.get('/initialize', (req, res) => {
-    res.sendFile(path.join(__dirname, '/templates/initialize.html'));
+
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '/templates/login.html'));
 });
 
+app.get('/signup', (req, res) => {
+    res.sendFile(path.join(__dirname, '/templates/signup.html'));
+});
+
+app.get('/terms-conditions' , (req, res) => {
+    const redirect = req.query.redirect;
+    console.log('Redirect:', redirect);
+    if (!redirect) {
+        res.sendFile(path.join(__dirname, '/templates/toc.html'));
+        return;
+    }
+    const tocPath = path.join(__dirname, '/templates/toc.html');
+
+    // Read the HTML file and inject the redirect value
+    fs.readFile(tocPath, 'utf8', (err, data) => {
+        if (err) {
+            console.error('Error reading toc.html:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+
+        // Inject the redirect value into the script tag
+        const updatedHtml = data.replace(
+            '<button class="button" style="display:none" id="redirect">Redirect back</button>',
+            `<button style="display:inline-block" class="button" onclick="window.location.href='/${redirect}'" id="redirect">Redirect back</button>`
+        );
+
+        res.send(updatedHtml);
+    });
+});
+// DON'T TOUCH ANYTHING BELOW THIS LINE
+// ------------------------------------
 app.get('/:nothing', (req, res) => {
     res.sendFile(path.join(__dirname, '/templates/404.html'));
 });
+
 // Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

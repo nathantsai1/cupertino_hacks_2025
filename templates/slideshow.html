@@ -240,6 +240,25 @@
       width: 100%;
       font-size: 1.1rem;
     }
+    nav .login {
+    display: inline-block;
+    padding: 0.8rem 1.6rem;
+    background: #4caf50;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    margin: 0 0.5rem;
+}
+
+nav .login:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
@@ -256,12 +275,14 @@
     <p>Discover plants and their role in a sustainable future</p>
   </header>
   <nav>
-    <a href="#hero">Home</a>
-    <a href="#about">About Us</a>
-    <a href="#project">Our Project</a>
-    <a href="#sustainability">Sustainability</a>
-    <a href="#contact">Contact</a>
-    <a href="projects.html">Try It</a>
+    <a class="login" href="#hero">Home</a>
+    <a class="login" href="#about">About Us</a>
+    <a class="login" href="#project">Our Project</a>
+    <a class="login" href="#sustainability">Sustainability</a>
+    <a class="login" href="#contact">Contact</a>
+    <a class="login" href="projects.html">Try It</a>
+    <button class="login" onclick="location.href='login'">Login</button>
+    <button class="login" onclick="location.href='signup'">Sign Up</button>
   </nav>
   <section id="hero" class="hero-section">
     <img src="https://media-hosting.imagekit.io/64314f784aeb4bd7/cd64629e-eb2a-4699-9e76-7c7ea3be4f8a.jpg?Expires=1839136208&Key-Pair-Id=K2ZIVPTIP2VGHC&Signature=ADV6x5Vf~3cY-2FSmlPave5g7R15f9Bcq6tc5BPta1rpyEGtkwb4o4tJOmMyYvGgwu4uQ72yiIX5ZuTsEesV4zJIM5mNquezQ-nZ9y9bHqd6Uw8G7kQd2aUmdZV94XyfFdYEITTjp8Y791mMesY5PWyse1XrbpvWynX~W~ADpg6mcvQaoJMHvFu4kTw8QE3nZxXcoSkXdAbblsxIGh2nqIQLI-OfOx9VD3sFeATxLC3J2TGdK1H13SHX3BvoilNh5672Twh33wcNQCVDo17ycDmrBKquTzNyfERqCOAooYxNqn5cxOx03PoQUhT0dgWpDPDnmC07NbTUQQ0sCYw1Ag__" alt="Monkey HQ Logo">

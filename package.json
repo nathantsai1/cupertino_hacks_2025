@@ -20,6 +20,7 @@
   "homepage": "https://github.com/nathantsai1/cupertino_hacks_2025#readme",
   "dependencies": {
     "@google/generative-ai": "^0.24.0",
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",

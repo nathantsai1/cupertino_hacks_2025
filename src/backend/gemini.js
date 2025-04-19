@@ -1,8 +1,8 @@
 const path = require('path');
 const fs = require("fs");
-
 require("dotenv").config();
 
+const { fetchPhotos } = require("./photos");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -54,24 +54,26 @@ const prompt = `
   }
 
 async function getDescription(PLANTS) {
-  return JSON.parse(readGeminiIdFile());
-
+  // remembver to uncomment the other plantinfos
+  let plantInfos = JSON.parse(readGeminiIdFile());
+  plantInfos = await fetchPhotos(plantInfos)
+  return await plantInfos;
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
 
-  const plantInfos = [];
+  // const plantInfos = [];
   for (const plant of PLANTS) {
     console.log(`Processing: ${plant.name}`);
     const info = await getPlantInfo(plant, model);
     plantInfos.push(info);
   }
-
-  fs.writeFileSync("plants_info.json", JSON.stringify(plantInfos, null, 2));
+  const final = await fetchPhotos(plantInfos);
+  fs.writeFileSync("plants_info.json", JSON.stringify(final, null, 2));
   console.log("✅ File 'plants_info.json' has been created.");
-  return plantInfos;
+  return final;
 }
 
 function readGeminiIdFile() {
-  const filePath = path.join(__dirname, '../../txt/gemini.txt'); // Adjust the path as necessary
+  const filePath = path.join(__dirname, '../../txt/gemini.txt'); 
   try {
     const data = fs.readFileSync(filePath, 'utf8'); // Read the file synchronously
     return data; // Return the file content

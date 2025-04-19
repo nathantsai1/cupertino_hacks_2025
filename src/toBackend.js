@@ -31,11 +31,7 @@ async function plant_backend(imageData, coords) {
         if (!result.ok) {
             throw new Error(`Error from /ai_it: ${result.status}`);
         }
-
-        const finalResult = await result.json();
-        console.log('Response from /ai_it:', finalResult);
-
-        return finalResult;
+        return result;
     } catch (error) {
         console.error('Error sending data to backend:', error);
         throw error;

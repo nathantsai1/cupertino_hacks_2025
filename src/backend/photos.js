@@ -3,11 +3,21 @@ const dotenv = require('dotenv');
 const fs = require('fs');
 const path = require('path');
 
+// NOTE: make sure to uncomment update plant data
+// NOTE: make sure to uncomment update plant data
+// NOTE: make sure to uncomment update plant data
+// NOTE: make sure to uncomment update plant data
+// NOTE: make sure to uncomment update plant data
+// NOTE: make sure to uncomment update plant data
+// NOTE: make sure to uncomment update plant data
+// NOTE: make sure to uncomment update plant data
+// NOTE: make sure to uncomment update plant data
+
 dotenv.config(); // Load environment variables from .env file
 
 // Function to read and parse plant data from plants_info.json
 function getPlantData() {
-    const filePath = path.join(__dirname, '../../plants_info.json'); // Adjust the path as necessary
+    const filePath = path.join(__dirname, '../../plants_info.json'); 
     try {
         const data = fs.readFileSync(filePath, 'utf8'); // Read the file synchronously
         return JSON.parse(data); // Parse and return the JSON content
@@ -19,7 +29,7 @@ function getPlantData() {
 
 // Function to write updated plant data back to plants_info.json
 function updatePlantData(updatedData) {
-    const filePath = path.join(__dirname, '../../plants_info.json'); // Adjust the path as necessary
+    const filePath = path.join(__dirname, '../../plants_info.json'); 
     try {
         fs.writeFileSync(filePath, JSON.stringify(updatedData, null, 2), 'utf8'); // Write the updated JSON data
         console.log("Updated plants_info.json successfully.");
@@ -57,7 +67,7 @@ async function fetchPhotoLinks(plantData) {
 
             const data = await response.json();
             if (data.results && data.results.length > 0) {
-                plant.rawPhotoLink = data.results[0].urls.raw; // Get the raw photo link
+                plant.rawPhotoLink = data.results[0].urls.raw; // Add rawPhotoLink
             } else {
                 console.warn(`No photos found for "${name}"`);
                 plant.rawPhotoLink = defaultPhotoLink; // Use default photo link
@@ -68,16 +78,21 @@ async function fetchPhotoLinks(plantData) {
         }
     }
 
-    return plantData;
+    console.log('After fetchPhotoLinks:', plantData); // Debugging
+    return plantData; // Ensure all fields are preserved
 }
 
 // Example usage
-(async () => {
+async function fetchPhotos(plantData) {
     try {
-        const plantData = getPlantData(); // Get plant data from plants_info.json
         const updatedPlantData = await fetchPhotoLinks(plantData); // Fetch photo links and update data
-        updatePlantData(updatedPlantData); // Write updated data back to plants_info.json
+        // updatePlantData(updatedPlantData); // Write updated data back to plants_info.json
+        return updatedPlantData; // Return the updated plant data with photo links
     } catch (error) {
         console.error("Error in processing:", error);
     }
-})();
+};
+
+module.exports = {
+    fetchPhotos 
+};

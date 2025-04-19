@@ -3,6 +3,13 @@ const fs = require('fs');
 require("dotenv").config();
 
 async function fetchPlant(image, coords) {
+  // todo: comment this
+  // todo: comment this
+  // todo: comment this
+  // todo: comment this
+  // todo: comment this
+  // todo: comment this
+  // todo: comment this
   return JSON.parse(readPlantIdFile());
   const data = {
     images: [image],
@@ -39,7 +46,7 @@ async function fetchPlant(image, coords) {
 }
 
 function readPlantIdFile() {
-  const filePath = path.join(__dirname, '../../txt/plantid.txt'); // Adjust the path as necessary
+  const filePath = path.join(__dirname, '../../txt/plantid.txt'); 
   try {
     const data = fs.readFileSync(filePath, 'utf8'); // Read the file synchronously
     return data; // Return the file content
