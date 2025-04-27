@@ -18,9 +18,14 @@ async function check_users(email, password, confirm_password, date, security_q) 
 }
 
 async function encrypt_password(password) {
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    return hashedPassword;
+    try {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        return hashedPassword;
+    } catch(e) {
+        console.error('Error encrypting password:', e);
+        return 0; // or handle the error as needed
+    }
 }
 
 async function compare_passwords(password, hashedPassword) {

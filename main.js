@@ -64,27 +64,33 @@ app.post('/photos', express.json(), async (req, res) => {
 
 app.post('/signup', async (req, res) => {
     // TODO idK?
-    const { email, password, confirm_password, date, security_q, check } = req.body;
+    const { email, password, confirm_pw, date, security_q, check } = req.body;
     // s1: check if email and password are valid
-    // 1=success, 2=pw not the same, 3=username not valid, 4=pw errror 5=somethng wriong 6=check not clicked
+    // 1=success, 2=pw not secure, 3=username not valid, 4=pw errror 5=somethng wriong 6=check not clicked 7=pw not same
     if (!check) {
         res.send(6);
         return;
     }
-    if(!email || !password || !confirm_password || !date || !security_q) {
+    if(!email || !password || !confirm_pw || !date || !security_q) {
         res.send(5);
         return;
-    } else if (password !== confirm_password) {
-        res.send(2);
+    } else if (password !== confirm_pw) {
+        console.log(password, confirm_pw)
+        res.send(7);
         return;
     }
     const is_valid = await check_users(email, password);
     if (!is_valid) res.send(is_valid);
     
     // s2: encrypt pw
-    // 1=success 0=pw error
+    // 8=error encrypting pw/question - system err
     const hashedPassword = await encrypt_password(password);
-
+    const hashedQuestion = await encrypt_password(security_q);
+    if (hashedPassword === 0 || hashedQuestion === 0) {
+        res.send(8);
+    }
+    console.log('Hashed Password:', hashedPassword);
+    return true;
     // Here you would typically handle the signup logic (e.g., save to database)
 });
 app.post('/login', express.json(), async (req, res) => {
